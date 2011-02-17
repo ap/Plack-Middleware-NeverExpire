@@ -10,14 +10,14 @@ use Time::Seconds 'ONE_YEAR';
 
 sub call {
 	my $self = shift;
-	my ( $env ) = @_;
-	my $res = $self->app->( $env );
-	if ( $res->[0] == 200 ) {
+	Plack::Util::response_cb( $self->app->( shift ), sub {
+		my $res = shift;
+		return if $res->[0] != 200;
 		my $date = Time::Piece->gmtime( time + ONE_YEAR );
 		Plack::Util::header_set( $res->[1], 'Expires', $date->strftime );
 		Plack::Util::header_push( $res->[1], 'Cache-Control', 'max-age=' . ONE_YEAR );
-	}
-	return $res;
+		return;
+	} );
 }
 
 1;

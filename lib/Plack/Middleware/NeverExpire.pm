@@ -39,3 +39,22 @@ __END__
 This middleware adds headers to a response that allow proxies and browsers to
 cache them for an effectively unlimited time. It is meant to be used in
 conjunction with the L<Conditional|Plack::Middleware::Conditional> middleware.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+L<Plack::Middleware::Expires>
+
+For most requests you want either immediate expiry with conditional C<GET>,
+or indefinite caching, or on high-load websites maybe a very short expiry
+duration for certain URIs (on the order of minutes or seconds, just to keep
+them from getting hammered): fine-grained control is rarely needed. I wanted
+a really trivial middleware for when it's not, so I wrote NeverExpire.
+
+But when you need it, L<Expires|Plack::Middleware::Expires> will give you the
+precise control over expiry durations that NeverExpire doesn't.
+
+=back

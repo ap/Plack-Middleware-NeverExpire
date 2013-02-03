@@ -1,5 +1,8 @@
 Revision history for Plack-Middleware-NeverExpire
 
+1.004 Sun 03 Feb 2013
+	- Add `public` to the Cache-Control header so non-expiry is ensured even over SSL.
+
 1.003 Tue 01 Mar 2011
 	- Declare dependecy on Plack 0.9942. No functional changes.
 

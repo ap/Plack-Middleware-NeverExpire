@@ -16,7 +16,7 @@ test_psgi app => $app, client => sub {
 	my $cb = shift;
 	my $res = $cb->( GET 'http://localhost/' );
 	ok $res->header( 'Expires' ), 'Expires header is added';
-	like $res->header( 'Cache-Control' ), qr/max-age=\d+/, 'Cache-Control header is added';
+	like $res->header( 'Cache-Control' ), qr/max-age=\d+, public/, 'Cache-Control header is added';
 };
 
 done_testing;

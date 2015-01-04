@@ -1,5 +1,8 @@
 Revision history for Plack-Middleware-NeverExpire
 
+1.005 Sun 04 Jan 2015
+	- Be strict about no imports.
+
 1.004 Sun 03 Feb 2013
 	- Add `public` to the Cache-Control header so non-expiry is ensured even over SSL.
 

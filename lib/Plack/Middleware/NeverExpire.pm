@@ -1,8 +1,10 @@
-package Plack::Middleware::NeverExpire;
 use strict;
-use parent 'Plack::Middleware';
+
+package Plack::Middleware::NeverExpire;
 
 # ABSTRACT: set expiration headers far in the future
+
+use parent 'Plack::Middleware';
 
 use Plack::Util ();
 use Time::Piece ();

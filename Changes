@@ -1,5 +1,9 @@
 Revision history for Plack-Middleware-NeverExpire
 
+1.006 Sat 10 Jan 2015
+	- No functional changes
+	- No longer contains INSTALL file with install-as-root instructions
+
 1.005 Sun 04 Jan 2015
 	- Be strict about no imports.
 

@@ -6,7 +6,7 @@ package Plack::Middleware::NeverExpire;
 
 # ABSTRACT: set expiration headers far in the future
 
-use parent 'Plack::Middleware';
+BEGIN { require Plack::Middleware; our @ISA = 'Plack::Middleware' }
 
 use Plack::Util ();
 use Time::Piece ();

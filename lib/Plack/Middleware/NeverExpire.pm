@@ -19,7 +19,7 @@ sub call {
 		return if $res->[0] != 200;
 		my $date = Time::Piece->gmtime( time + Time::Seconds::ONE_YEAR );
 		Plack::Util::header_set( $res->[1], 'Expires', $date->strftime );
-		Plack::Util::header_push( $res->[1], 'Cache-Control', 'max-age=' . Time::Seconds::ONE_YEAR . ', public' );
+		push @{ $res->[1] }, 'Cache-Control', 'max-age=' . Time::Seconds::ONE_YEAR . ', public';
 		return;
 	} );
 }

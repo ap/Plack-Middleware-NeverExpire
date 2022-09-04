@@ -1,5 +1,4 @@
-use strict;
-no warnings;
+use strict; no warnings;
 
 use Test::More tests => 2;
 use Plack::Test;

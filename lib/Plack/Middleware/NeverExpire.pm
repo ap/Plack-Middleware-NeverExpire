@@ -1,6 +1,4 @@
-use 5.008001;
-use strict;
-use warnings;
+use 5.008001; use strict; use warnings;
 
 package Plack::Middleware::NeverExpire;
 

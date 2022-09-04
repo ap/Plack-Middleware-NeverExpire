@@ -2,7 +2,7 @@ use 5.008001; use strict; use warnings;
 
 package Plack::Middleware::NeverExpire;
 
-# ABSTRACT: set expiration headers far in the future
+our $VERSION = '1.006';
 
 BEGIN { require Plack::Middleware; our @ISA = 'Plack::Middleware' }
 
@@ -25,6 +25,14 @@ sub call {
 1;
 
 __END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Plack::Middleware::NeverExpire - set expiration headers far in the future
 
 =head1 SYNOPSIS
 
@@ -60,3 +68,5 @@ But when you need it, L<Expires|Plack::Middleware::Expires> will give you the
 precise control over expiry durations that NeverExpire doesn't.
 
 =back
+
+=cut

@@ -8,17 +8,23 @@ BEGIN { require Plack::Middleware; our @ISA = 'Plack::Middleware' }
 
 use Plack::Util ();
 use Time::Piece ();
-use Time::Seconds ();
+use Time::Seconds 'ONE_YEAR';
+
+sub imf_fixdate { Time::Piece->gmtime( $_[0] )->strftime }
+
+sub prepare_app { shift->{'_cached_time'} = 'NaN' }
 
 sub call {
 	my $self = shift;
-	Plack::Util::response_cb( $self->app->( shift ), sub {
-		my $res = shift;
-		return if $res->[0] != 200;
-		my $date = Time::Piece->gmtime( time + Time::Seconds::ONE_YEAR );
-		Plack::Util::header_set( $res->[1], 'Expires', $date->strftime );
-		push @{ $res->[1] }, 'Cache-Control', 'max-age=' . Time::Seconds::ONE_YEAR . ', public';
-		return;
+	my $now = time;
+	Plack::Util::response_cb( &{ $self->app }, sub {
+		$_[0][0] == 200 or return;
+		my $h = $_[0][1];
+		push @$h, 'Cache-Control', 'max-age=' . ONE_YEAR . ', public';
+		Plack::Util::header_set( $h, 'Expires' => $self->{'_cached_time'} == $now
+			?   $self->{'_cached_stamp'}
+			: ( $self->{'_cached_stamp'} = imf_fixdate ONE_YEAR + ( $self->{'_cached_time'} = $now ) )
+		);
 	} );
 }
 

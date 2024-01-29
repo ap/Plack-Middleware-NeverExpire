@@ -2,7 +2,7 @@ use 5.008001; use strict; use warnings;
 
 package Plack::Middleware::NeverExpire;
 
-our $VERSION = '1.007';
+our $VERSION = '1.101';
 
 BEGIN { require Plack::Middleware; our @ISA = 'Plack::Middleware' }
 

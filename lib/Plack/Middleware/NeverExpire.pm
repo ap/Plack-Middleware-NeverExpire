@@ -7,10 +7,17 @@ our $VERSION = '1.007';
 BEGIN { require Plack::Middleware; our @ISA = 'Plack::Middleware' }
 
 use Plack::Util ();
-use Time::Piece ();
-use Time::Seconds 'ONE_YEAR';
 
-sub imf_fixdate { Time::Piece->gmtime( $_[0] )->strftime }
+sub ONE_YEAR () { 31_556_930 } # 365.24225 days
+
+# RFC 7231 Section 7.1.1.1
+my @DAY = qw( ??? Mon Tue Wed Thu Fri Sat Sun ); # 1-based
+my @MON = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+sub FMT () { '%s, %02d %s %04d %02d:%02d:%02d GMT' }
+sub imf_fixdate {
+	my @f = gmtime $_[0];
+	sprintf FMT, $DAY[$f[6]], $f[3], $MON[$f[4]], 1900+$f[5], @f[2,1,0];
+}
 
 sub prepare_app { shift->{'_cached_time'} = 'NaN' }
 

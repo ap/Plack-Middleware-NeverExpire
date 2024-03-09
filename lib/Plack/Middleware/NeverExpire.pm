@@ -19,19 +19,16 @@ sub imf_fixdate {
 	sprintf FMT, $DAY[$f[6]], $f[3], $MON[$f[4]], 1900+$f[5], @f[2,1,0];
 }
 
-sub prepare_app { shift->{'_cached_time'} = 'NaN' }
+my $cached_stamp = imf_fixdate my $cached_time = time;
 
 sub call {
-	my $self = shift;
-	my $now = time;
-	Plack::Util::response_cb( &{ $self->app }, sub {
+	Plack::Util::response_cb( &{ shift->app }, sub {
 		$_[0][0] == 200 or return;
 		my $h = $_[0][1];
 		push @$h, 'Cache-Control', 'max-age=' . ONE_YEAR . ', public';
-		Plack::Util::header_set( $h, 'Expires' => $self->{'_cached_time'} == $now
-			?   $self->{'_cached_stamp'}
-			: ( $self->{'_cached_stamp'} = imf_fixdate ONE_YEAR + ( $self->{'_cached_time'} = $now ) )
-		);
+		my $now = time;
+		$cached_time == $now or $cached_stamp = imf_fixdate ONE_YEAR + ( $cached_time = $now );
+		Plack::Util::header_set( $h, Expires => $cached_stamp );
 	} );
 }
 

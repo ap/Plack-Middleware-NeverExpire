@@ -2,7 +2,7 @@ use 5.008001; use strict; use warnings;
 
 package Plack::Middleware::NeverExpire;
 
-our $VERSION = '1.101';
+our $VERSION = '1.201';
 
 BEGIN { require Plack::Middleware; our @ISA = 'Plack::Middleware' }
 
@@ -10,7 +10,7 @@ use Plack::Util ();
 
 sub ONE_YEAR () { 31_556_930 } # 365.24225 days
 
-# RFC 7231 Section 7.1.1.1
+# RFC 9110 Section 5.6.7
 my @DAY = qw( Sun Mon Tue Wed Thu Fri Sat );
 my @MON = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 sub FMT () { '%s, %02d %s %04d %02d:%02d:%02d GMT' }

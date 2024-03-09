@@ -11,7 +11,7 @@ use Plack::Util ();
 sub ONE_YEAR () { 31_556_930 } # 365.24225 days
 
 # RFC 7231 Section 7.1.1.1
-my @DAY = qw( ??? Mon Tue Wed Thu Fri Sat Sun ); # 1-based
+my @DAY = qw( Sun Mon Tue Wed Thu Fri Sat );
 my @MON = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 sub FMT () { '%s, %02d %s %04d %02d:%02d:%02d GMT' }
 sub imf_fixdate {

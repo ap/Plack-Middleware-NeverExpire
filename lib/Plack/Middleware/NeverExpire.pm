@@ -20,17 +20,16 @@ sub imf_fixdate {
 }
 
 my $cached_stamp = imf_fixdate my $cached_time = time;
-
-sub call {
-	Plack::Util::response_cb( &{ shift->app }, sub {
-		$_[0][0] == 200 or return;
-		my $h = $_[0][1];
-		push @$h, 'Cache-Control', 'max-age=' . ONE_YEAR . ', public';
-		my $now = time;
-		$cached_time == $now or $cached_stamp = imf_fixdate ONE_YEAR + ( $cached_time = $now );
-		Plack::Util::header_set( $h, Expires => $cached_stamp );
-	} );
+sub inject_headers {
+	$_[0][0] == 200 or return;
+	my $h = $_[0][1];
+	push @$h, 'Cache-Control', 'max-age=' . ONE_YEAR . ', public';
+	my $now = time;
+	$cached_time == $now or $cached_stamp = imf_fixdate ONE_YEAR + ( $cached_time = $now );
+	Plack::Util::header_set( $h, Expires => $cached_stamp );
 }
+
+sub call { Plack::Util::response_cb( &{ shift->app }, \&inject_headers ) }
 
 1;
 
@@ -59,6 +58,21 @@ Plack::Middleware::NeverExpire - set expiration headers far in the future
 This middleware adds headers to a response that allow proxies and browsers to
 cache them for an effectively unlimited time. It is meant to be used in
 conjunction with the L<Conditional|Plack::Middleware::Conditional> middleware.
+
+=head1 INTERFACE
+
+This middleware provides some functions for general use. They are not exported.
+
+=head2 C<imf_fixdate>
+
+This takes an epoch time and returns it as a timestamp formatted according to
+L<S<RFC 9110 section 5.6.7>|https://datatracker.ietf.org/doc/html/rfc9110#name-date-time-formats>.
+
+=head2 C<inject_headers>
+
+This takes a L<PSGI> response array and adds the caching headers to it
+if the status is 200.
+It returns nothing.
 
 =head1 SEE ALSO
 
